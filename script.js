@@ -79,9 +79,22 @@ links.forEach((link) => {
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
   const nextField = contactForm.querySelector('input[name="_next"]');
+  const emailField = contactForm.querySelector('#email');
+  const replyToField = contactForm.querySelector('input[name="_replyto"]');
   const runtimeNote = document.querySelector('.contact-runtime-note');
   const submitButton = contactForm.querySelector('button[type="submit"]');
   const isFileProtocol = window.location.protocol === 'file:';
+
+  const syncReplyTo = () => {
+    if (emailField && replyToField) {
+      replyToField.value = emailField.value.trim();
+    }
+  };
+
+  if (emailField && replyToField) {
+    emailField.addEventListener('input', syncReplyTo);
+    emailField.addEventListener('blur', syncReplyTo);
+  }
 
   if (isFileProtocol) {
     if (runtimeNote) {
@@ -96,9 +109,14 @@ if (contactForm) {
     }
 
     contactForm.addEventListener('submit', (event) => {
+      syncReplyTo();
       event.preventDefault();
     });
   } else if (nextField) {
     nextField.value = new URL('./thanks.html', window.location.href).href;
+
+    contactForm.addEventListener('submit', () => {
+      syncReplyTo();
+    });
   }
 }
