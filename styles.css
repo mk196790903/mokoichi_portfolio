@@ -635,7 +635,7 @@ a {
 .work-item img {
   height: 100%;
   object-fit:contain;
-  object-position: center;
+  object-position: top;
   
   transition: transform 0.8s ease;
 }
